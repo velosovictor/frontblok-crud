@@ -1,0 +1,47 @@
+{
+  "name": "@rationalbloks/frontblok-crud",
+  "version": "0.1.0",
+  "description": "Universal CRUD API layer for RationalBloks frontends",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "prepublishOnly": "npm run build",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "rationalbloks",
+    "crud",
+    "api",
+    "react",
+    "hooks",
+    "typescript"
+  ],
+  "author": "RationalBloks",
+  "license": "MIT",
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "@rationalbloks/frontblok-auth": ">=0.1.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "typescript": "^5.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/velosovictor/frontblok-crud.git"
+  }
+}
