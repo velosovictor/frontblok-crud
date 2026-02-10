@@ -37,7 +37,7 @@
     "@rationalbloks/frontblok-auth": ">=0.1.0"
   },
   "devDependencies": {
-    "@types/react": "^18.2.0",
+    "@types/react": "^19.0.0",
     "typescript": "^5.3.0"
   },
   "repository": {

@@ -27,10 +27,8 @@ import type { BaseEntity } from './types.js';
 // We define the minimal interface we need from frontblok-auth's BaseApi.
 // This avoids tight coupling and allows for testing.
 
-/**
- * Minimal interface for the auth API client.
- * Matches frontblok-auth's BaseApi.request() signature.
- */
+// Minimal interface for the auth API client.
+// Matches frontblok-auth's BaseApi.request() signature.
 export interface AuthApiClient {
   request<T>(endpoint: string, options?: RequestInit): Promise<T>;
 }
@@ -53,17 +51,9 @@ export class UniversalApi {
   // ==========================================================================
   // These methods work with any entity - just pass the entity name.
 
-  /**
-   * Get all entities of a type.
-   * 
-   * @param entityName - The entity/table name (e.g., 'tasks', 'projects')
-   * @param options - Optional query parameters
-   * @returns Array of entities
-   * 
-   * @example
-   * const tasks = await api.getAll<Task>('tasks');
-   * const activeTasks = await api.getAll<Task>('tasks', { status: 'active' });
-   */
+  // Get all entities of a type.
+  // const tasks = await api.getAll<Task>('tasks');
+  // const activeTasks = await api.getAll<Task>('tasks', { status: 'active' });
   async getAll<T extends BaseEntity>(
     entityName: string,
     options?: { skip?: number; limit?: number; [key: string]: unknown }
@@ -86,30 +76,14 @@ export class UniversalApi {
     return this.authApi.request<T[]>(`/api/${this.pluralize(entityName)}/${query}`);
   }
 
-  /**
-   * Get a single entity by ID.
-   * 
-   * @param entityName - The entity/table name
-   * @param id - Entity UUID
-   * @returns The entity or throws if not found
-   * 
-   * @example
-   * const task = await api.getOne<Task>('tasks', 'uuid-here');
-   */
+  // Get a single entity by ID.
+  // const task = await api.getOne<Task>('tasks', 'uuid-here');
   async getOne<T extends BaseEntity>(entityName: string, id: string): Promise<T> {
     return this.authApi.request<T>(`/api/${this.pluralize(entityName)}/${id}`);
   }
 
-  /**
-   * Create a new entity.
-   * 
-   * @param entityName - The entity/table name
-   * @param data - Entity data (without id, created_at, updated_at)
-   * @returns The created entity with all fields
-   * 
-   * @example
-   * const task = await api.create<Task>('tasks', { title: 'New Task', status: 'pending' });
-   */
+  // Create a new entity.
+  // const task = await api.create<Task>('tasks', { title: 'New Task', status: 'pending' });
   async create<T extends BaseEntity>(
     entityName: string,
     data: Partial<Omit<T, 'id' | 'created_at' | 'updated_at'>>
@@ -120,17 +94,8 @@ export class UniversalApi {
     });
   }
 
-  /**
-   * Update an existing entity.
-   * 
-   * @param entityName - The entity/table name
-   * @param id - Entity UUID
-   * @param data - Partial entity data to update
-   * @returns The updated entity
-   * 
-   * @example
-   * const task = await api.update<Task>('tasks', 'uuid-here', { status: 'done' });
-   */
+  // Update an existing entity.
+  // const task = await api.update<Task>('tasks', 'uuid-here', { status: 'done' });
   async update<T extends BaseEntity>(
     entityName: string,
     id: string,
@@ -142,15 +107,8 @@ export class UniversalApi {
     });
   }
 
-  /**
-   * Delete an entity.
-   * 
-   * @param entityName - The entity/table name
-   * @param id - Entity UUID
-   * 
-   * @example
-   * await api.remove('tasks', 'uuid-here');
-   */
+  // Delete an entity.
+  // await api.remove('tasks', 'uuid-here');
   async remove(entityName: string, id: string): Promise<void> {
     await this.authApi.request<void>(`/api/${this.pluralize(entityName)}/${id}`, {
       method: 'DELETE',
@@ -161,9 +119,7 @@ export class UniversalApi {
   // UTILITY METHODS
   // ==========================================================================
 
-  /**
-   * Smart pluralization for API endpoint paths.
-   */
+  // Smart pluralization for API endpoint paths.
   private pluralize(word: string): string {
     if (!word) return word;
 
@@ -201,37 +157,22 @@ export class UniversalApi {
 
 let apiInstance: UniversalApi | null = null;
 
-/**
- * Initialize the global CRUD API instance.
- * Call this once at app startup (e.g., in main.tsx).
- * 
- * @param authApi - The frontblok-auth BaseApi instance (from createAuthApi)
- * @returns The initialized UniversalApi instance
- * 
- * @example
- * // In main.tsx or App.tsx
- * import { createAuthApi } from '@rationalbloks/frontblok-auth';
- * import { initApi } from '@rationalbloks/frontblok-crud';
- * 
- * const authApi = createAuthApi(import.meta.env.VITE_DATABASE_API_URL);
- * initApi(authApi);
- */
+// Initialize the global CRUD API instance.
+// Call this once at app startup (e.g., in main.tsx).
+// // In main.tsx or App.tsx
+// import { createAuthApi } from '@rationalbloks/frontblok-auth';
+// import { initApi } from '@rationalbloks/frontblok-crud';
+// const authApi = createAuthApi(import.meta.env.VITE_DATABASE_API_URL);
+// initApi(authApi);
 export function initApi(authApi: AuthApiClient): UniversalApi {
   apiInstance = new UniversalApi(authApi);
   return apiInstance;
 }
 
-/**
- * Get the global CRUD API instance.
- * Throws if initApi hasn't been called.
- * 
- * @returns The UniversalApi instance
- * 
- * @example
- * import { getApi } from '@rationalbloks/frontblok-crud';
- *
- * const tasks = await getApi().getAll<Task>('tasks';
- */
+// Get the global CRUD API instance.
+// Throws if initApi hasn't been called.
+// import { getApi } from '@rationalbloks/frontblok-crud';
+// const tasks = await getApi().getAll<Task>('tasks');
 export function getApi(): UniversalApi {
   if (!apiInstance) {
     throw new Error(
@@ -246,17 +187,13 @@ export function getApi(): UniversalApi {
   return apiInstance;
 }
 
-/**
- * Check if the API has been initialized.
- * Useful for conditional rendering or lazy initialization.
- */
+// Check if the API has been initialized.
+// Useful for conditional rendering or lazy initialization.
 export function isApiInitialized(): boolean {
   return apiInstance !== null;
 }
 
-/**
- * Reset the API instance (useful for testing).
- */
+// Reset the API instance (useful for testing).
 export function resetApi(): void {
   apiInstance = null;
 }

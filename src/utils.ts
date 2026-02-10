@@ -10,14 +10,10 @@ import type { EntityConfig, FieldConfig, FieldType, EntityMetadata } from './typ
 // NAMING UTILITIES
 // ============================================================================
 
-/**
- * Convert string to PascalCase.
- * Used for TypeScript interface names.
- * 
- * @example
- * toPascalCase('user_tasks') // 'UserTasks'
- * toPascalCase('task') // 'Task'
- */
+// Convert string to PascalCase.
+// Used for TypeScript interface names.
+// toPascalCase('user_tasks') // 'UserTasks'
+// toPascalCase('task') // 'Task'
 export function toPascalCase(str: string): string {
   return str
     .split(/[_\s-]+/)
@@ -25,27 +21,19 @@ export function toPascalCase(str: string): string {
     .join('');
 }
 
-/**
- * Convert string to camelCase.
- * Used for variable and function names.
- * 
- * @example
- * toCamelCase('user_tasks') // 'userTasks'
- * toCamelCase('Task') // 'task'
- */
+// Convert string to camelCase.
+// Used for variable and function names.
+// toCamelCase('user_tasks') // 'userTasks'
+// toCamelCase('Task') // 'task'
 export function toCamelCase(str: string): string {
   const pascal = toPascalCase(str);
   return pascal.charAt(0).toLowerCase() + pascal.slice(1);
 }
 
-/**
- * Convert string to snake_case.
- * Used for API endpoint paths (table names).
- * 
- * @example
- * toSnakeCase('UserTasks') // 'user_tasks'
- * toSnakeCase('task') // 'task'
- */
+// Convert string to snake_case.
+// Used for API endpoint paths (table names).
+// toSnakeCase('UserTasks') // 'user_tasks'
+// toSnakeCase('task') // 'task'
 export function toSnakeCase(str: string): string {
   return str
     .replace(/([a-z])([A-Z])/g, '$1_$2')
@@ -53,15 +41,11 @@ export function toSnakeCase(str: string): string {
     .toLowerCase();
 }
 
-/**
- * Get singular form of a word.
- * Simple implementation that handles common cases.
- * 
- * @example
- * toSingular('tasks') // 'task'
- * toSingular('categories') // 'category'
- * toSingular('users') // 'user'
- */
+// Get singular form of a word.
+// Simple implementation that handles common cases.
+// toSingular('tasks') // 'task'
+// toSingular('categories') // 'category'
+// toSingular('users') // 'user'
 export function toSingular(str: string): string {
   if (str.endsWith('ies') && str.length > 3) {
     return str.slice(0, -3) + 'y';
@@ -81,14 +65,10 @@ export function toSingular(str: string): string {
   return str;
 }
 
-/**
- * Smart pluralization for entity names.
- *
- * @example
- * toPlural('task') // 'tasks'
- * toPlural('category') // 'categories'
- * toPlural('status') // 'status' (already ends in s)
- */
+// Smart pluralization for entity names.
+// toPlural('task') // 'tasks'
+// toPlural('category') // 'categories'
+// toPlural('status') // 'status' (already ends in s)
 export function toPlural(str: string): string {
   if (!str) return str;
 
@@ -121,10 +101,8 @@ export function toPlural(str: string): string {
 // TYPE CONVERSION UTILITIES
 // ============================================================================
 
-/**
- * Convert schema field type to TypeScript type string.
- * Used by the MCP generator to create entities.ts.
- */
+// Convert schema field type to TypeScript type string.
+// Used by the MCP generator to create entities.ts.
 export function schemaTypeToTs(fieldType: FieldType): string {
   const mapping: Record<FieldType, string> = {
     string: 'string',
@@ -140,10 +118,8 @@ export function schemaTypeToTs(fieldType: FieldType): string {
   return mapping[fieldType] || 'unknown';
 }
 
-/**
- * Get default value for a field type.
- * Used for form initialization.
- */
+// Get default value for a field type.
+// Used for form initialization.
 export function getFieldDefault(field: FieldConfig): unknown {
   // If schema has explicit default, use it
   if (field.default !== undefined) {
@@ -166,10 +142,8 @@ export function getFieldDefault(field: FieldConfig): unknown {
   return defaults[field.type] ?? '';
 }
 
-/**
- * Check if a field is a foreign key to app_users.
- * Used for FK-based authorization.
- */
+// Check if a field is a foreign key to app_users.
+// Used for FK-based authorization.
 export function isUserForeignKey(field: FieldConfig): boolean {
   return Boolean(field.foreign_key?.startsWith('app_users.'));
 }
@@ -178,10 +152,8 @@ export function isUserForeignKey(field: FieldConfig): boolean {
 // ENTITY METADATA UTILITIES
 // ============================================================================
 
-/**
- * Create entity metadata from schema.
- * Generates singular/plural names and extracts field info.
- */
+// Create entity metadata from schema.
+// Generates singular/plural names and extracts field info.
 export function createEntityMetadata(
   tableName: string,
   fields: EntityConfig
@@ -211,10 +183,8 @@ export function createEntityMetadata(
   };
 }
 
-/**
- * Get user FK fields from entity config.
- * These fields are used for FK-based authorization.
- */
+// Get user FK fields from entity config.
+// These fields are used for FK-based authorization.
 export function getUserFkFields(entityConfig: EntityConfig): string[] {
   return Object.entries(entityConfig)
     .filter(([key, config]) => 
@@ -229,10 +199,8 @@ export function getUserFkFields(entityConfig: EntityConfig): string[] {
 // FORM UTILITIES
 // ============================================================================
 
-/**
- * Get initial form data from entity config.
- * Creates an object with default values for all fields.
- */
+// Get initial form data from entity config.
+// Creates an object with default values for all fields.
 export function getInitialFormData(
   entityConfig: EntityConfig
 ): Record<string, unknown> {
@@ -250,10 +218,8 @@ export function getInitialFormData(
   return data;
 }
 
-/**
- * Get form field configuration for a single field.
- * Useful for building dynamic forms.
- */
+// Get form field configuration for a single field.
+// Useful for building dynamic forms.
 export function getFormFieldConfig(fieldName: string, fieldConfig: FieldConfig) {
   return {
     name: fieldName,

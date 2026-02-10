@@ -26,13 +26,8 @@ import {
   schemaTypeToTs,
 } from './utils.js';
 
-/**
- * Generate complete entities.ts content from a schema.
- * This is THE ONLY generation function needed.
- * 
- * @param schema - The database schema in FLAT format
- * @returns Complete TypeScript file content
- */
+// Generate complete entities.ts content from a schema.
+// This is THE ONLY generation function needed.
 export function generateEntitiesTs(schema: Schema): string {
   const lines: string[] = [
     '// ============================================================================',
@@ -60,9 +55,7 @@ export function generateEntitiesTs(schema: Schema): string {
   return lines.join('\n');
 }
 
-/**
- * Generate TypeScript interface for a single entity.
- */
+// Generate TypeScript interface for a single entity.
 function generateEntityInterface(
   tableName: string,
   fields: EntityConfig
@@ -101,10 +94,8 @@ function generateEntityInterface(
   return lines;
 }
 
-/**
- * Get TypeScript type string for a field config.
- * Handles enums and basic types.
- */
+// Get TypeScript type string for a field config.
+// Handles enums and basic types.
 function getTypeScriptType(fieldConfig: FieldConfig): string {
   // Handle enum types
   if (fieldConfig.enum && fieldConfig.enum.length > 0) {
@@ -115,9 +106,7 @@ function getTypeScriptType(fieldConfig: FieldConfig): string {
   return schemaTypeToTs(fieldConfig.type);
 }
 
-/**
- * Generate entity registry for runtime use.
- */
+// Generate entity registry for runtime use.
 function generateEntityRegistry(schema: Schema): string[] {
   const lines: string[] = [
     '// ============================================================================',
@@ -153,10 +142,8 @@ function generateEntityRegistry(schema: Schema): string[] {
   return lines;
 }
 
-/**
- * Format fields object as TypeScript object literal.
- * Compact single-line format for readability.
- */
+// Format fields object as TypeScript object literal.
+// Compact single-line format for readability.
 function formatFieldsAsTs(fields: EntityConfig): string {
   const fieldEntries: string[] = [];
 
@@ -198,10 +185,8 @@ function formatFieldsAsTs(fields: EntityConfig): string {
 // VALIDATION
 // ============================================================================
 
-/**
- * Validate a schema before generation.
- * Returns array of error messages (empty if valid).
- */
+// Validate a schema before generation.
+// Returns array of error messages (empty if valid).
 export function validateSchema(schema: Schema): string[] {
   const errors: string[] = [];
 

@@ -30,27 +30,22 @@ import type { BaseEntity, ListState, EntityState, MutationState } from './types.
 // ============================================================================
 // Fetches all entities of a type.
 
-/**
- * Hook for fetching a list of entities.
- * 
- * @param entityName - The entity/table name (e.g., 'tasks', 'projects')
- * @param options - Optional query parameters (skip, limit, filters)
- * @returns List state with items, loading, error, and refetch
- * 
- * @example
- * function TaskList() {
- *   const { items, loading, error, refetch } = useEntityList<Task>('tasks');
- *   
- *   if (loading) return <Loading />;
- *   if (error) return <Error message={error.message} />;
- *   
- *   return (
- *     <ul>
- *       {items.map(task => <li key={task.id}>{task.title}</li>)}
- *     </ul>
- *   );
- * }
- */
+// Hook for fetching a list of entities.
+// Takes an entity/table name (e.g., 'tasks', 'projects') and optional query parameters (skip, limit, filters).
+// Returns list state with items, loading, error, and refetch.
+//
+// function TaskList() {
+//   const { items, loading, error, refetch } = useEntityList<Task>('tasks');
+//   
+//   if (loading) return <Loading />;
+//   if (error) return <Error message={error.message} />;
+//   
+//   return (
+//     <ul>
+//       {items.map(task => <li key={task.id}>{task.title}</li>)}
+//     </ul>
+//   );
+// }
 export function useEntityList<T extends BaseEntity>(
   entityName: string,
   options?: { skip?: number; limit?: number; [key: string]: unknown }
@@ -104,24 +99,19 @@ export function useEntityList<T extends BaseEntity>(
 // ============================================================================
 // Fetches a single entity by ID.
 
-/**
- * Hook for fetching a single entity by ID.
- * 
- * @param entityName - The entity/table name
- * @param id - Entity UUID (can be undefined for create mode)
- * @returns Entity state with item, loading, error, and refetch
- * 
- * @example
- * function TaskDetail({ id }: { id: string }) {
- *   const { item, loading, error } = useEntity<Task>('tasks', id);
- *   
- *   if (loading) return <Loading />;
- *   if (error) return <Error message={error.message} />;
- *   if (!item) return <NotFound />;
- *   
- *   return <h1>{item.title}</h1>;
- * }
- */
+// Hook for fetching a single entity by ID.
+// Takes an entity/table name and an entity UUID (can be undefined for create mode).
+// Returns entity state with item, loading, error, and refetch.
+//
+// function TaskDetail({ id }: { id: string }) {
+//   const { item, loading, error } = useEntity<Task>('tasks', id);
+//   
+//   if (loading) return <Loading />;
+//   if (error) return <Error message={error.message} />;
+//   if (!item) return <NotFound />;
+//   
+//   return <h1>{item.title}</h1>;
+// }
 export function useEntity<T extends BaseEntity>(
   entityName: string,
   id?: string
@@ -181,52 +171,43 @@ export function useEntity<T extends BaseEntity>(
 // ============================================================================
 // Provides methods for mutating entities.
 
-/**
- * Mutation functions returned by useMutation.
- */
+// Mutation functions returned by useMutation.
 export interface MutationFunctions<T extends BaseEntity> {
-  /** Create a new entity */
+  // Create a new entity
   create: (data: Partial<Omit<T, 'id' | 'created_at' | 'updated_at'>>) => Promise<T>;
-  /** Update an existing entity */
+  // Update an existing entity
   update: (id: string, data: Partial<Omit<T, 'id' | 'created_at' | 'updated_at'>>) => Promise<T>;
-  /** Delete an entity */
+  // Delete an entity
   remove: (id: string) => Promise<void>;
 }
 
-/**
- * Return type for useMutation hook.
- */
+// Return type for useMutation hook.
 export interface UseMutationResult<T extends BaseEntity> extends MutationState<T> {
   mutate: MutationFunctions<T>;
 }
 
-/**
- * Hook for mutating entities (create, update, delete).
- * 
- * @param entityName - The entity/table name
- * @returns Mutation state and functions
- * 
- * @example
- * function TaskForm() {
- *   const { mutate, loading, error, reset } = useMutation<Task>('tasks');
- *   
- *   const handleSubmit = async (data: CreateTaskInput) => {
- *     try {
- *       await mutate.create(data);
- *       navigate('/tasks');
- *     } catch (err) {
- *       // Error is also available in the error state
- *     }
- *   };
- *   
- *   return (
- *     <form onSubmit={handleSubmit}>
- *       {error && <Alert severity="error">{error.message}</Alert>}
- *       <Button loading={loading}>Save</Button>
- *     </form>
- *   );
- * }
- */
+// Hook for mutating entities (create, update, delete).
+// Takes an entity/table name. Returns mutation state and functions.
+//
+// function TaskForm() {
+//   const { mutate, loading, error, reset } = useMutation<Task>('tasks');
+//   
+//   const handleSubmit = async (data: CreateTaskInput) => {
+//     try {
+//       await mutate.create(data);
+//       navigate('/tasks');
+//     } catch (err) {
+//       // Error is also available in the error state
+//     }
+//   };
+//   
+//   return (
+//     <form onSubmit={handleSubmit}>
+//       {error && <Alert severity="error">{error.message}</Alert>}
+//       <Button loading={loading}>Save</Button>
+//     </form>
+//   );
+// }
 export function useMutation<T extends BaseEntity>(
   entityName: string
 ): UseMutationResult<T> {
@@ -317,63 +298,56 @@ export function useMutation<T extends BaseEntity>(
 // Combines useEntity and useMutation for form handling.
 // Perfect for create/edit forms.
 
-/**
- * Return type for useEntityForm hook.
- */
+// Return type for useEntityForm hook.
 export interface UseEntityFormResult<T extends BaseEntity> {
-  /** Current form data (null for create, entity for edit) */
+  // Current form data (null for create, entity for edit)
   item: T | null;
-  /** True while loading existing entity or saving */
+  // True while loading existing entity or saving
   loading: boolean;
-  /** True only while loading existing entity */
+  // True only while loading existing entity
   loadingEntity: boolean;
-  /** True only while saving (create/update) */
+  // True only while saving (create/update)
   saving: boolean;
-  /** Any error that occurred */
+  // Any error that occurred
   error: Error | null;
-  /** True if this is an edit (id provided) */
+  // True if this is an edit (id provided)
   isEdit: boolean;
-  /** Save the form data (creates or updates based on isEdit) */
+  // Save the form data (creates or updates based on isEdit)
   save: (data: Partial<Omit<T, 'id' | 'created_at' | 'updated_at'>>) => Promise<T>;
-  /** Delete the entity (only valid in edit mode) */
+  // Delete the entity (only valid in edit mode)
   remove: () => Promise<void>;
 }
 
-/**
- * Hook for handling entity forms (create and edit).
- * 
- * @param entityName - The entity/table name
- * @param id - Entity UUID (undefined for create mode)
- * @returns Form state and actions
- * 
- * @example
- * function TaskForm({ id }: { id?: string }) {
- *   const { item, loading, saving, error, isEdit, save } = useEntityForm<Task>('tasks', id);
- *   const [formData, setFormData] = useState({ title: '', status: 'pending' });
- *   
- *   // Populate form when editing
- *   useEffect(() => {
- *     if (item) {
- *       setFormData({ title: item.title, status: item.status });
- *     }
- *   }, [item]);
- *   
- *   const handleSubmit = async (e: FormEvent) => {
- *     e.preventDefault();
- *     await save(formData);
- *     navigate('/tasks');
- *   };
- *   
- *   if (loading) return <Loading />;
- *   
- *   return (
- *     <form onSubmit={handleSubmit}>
- *       <input value={formData.title} onChange={...} />
- *       <button disabled={saving}>{isEdit ? 'Update' : 'Create'}</button>
- *     </form>
- *   );
- * }
- */
+// Hook for handling entity forms (create and edit).
+// Takes an entity/table name and an optional entity UUID (undefined for create mode).
+// Returns form state and actions.
+//
+// function TaskForm({ id }: { id?: string }) {
+//   const { item, loading, saving, error, isEdit, save } = useEntityForm<Task>('tasks', id);
+//   const [formData, setFormData] = useState({ title: '', status: 'pending' });
+//   
+//   // Populate form when editing
+//   useEffect(() => {
+//     if (item) {
+//       setFormData({ title: item.title, status: item.status });
+//     }
+//   }, [item]);
+//   
+//   const handleSubmit = async (e: FormEvent) => {
+//     e.preventDefault();
+//     await save(formData);
+//     navigate('/tasks');
+//   };
+//   
+//   if (loading) return <Loading />;
+//   
+//   return (
+//     <form onSubmit={handleSubmit}>
+//       <input value={formData.title} onChange={...} />
+//       <button disabled={saving}>{isEdit ? 'Update' : 'Create'}</button>
+//     </form>
+//   );
+// }
 export function useEntityForm<T extends BaseEntity>(
   entityName: string,
   id?: string
