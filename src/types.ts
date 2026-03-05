@@ -33,7 +33,11 @@ export type FieldType =
   | 'datetime'
   | 'date'
   | 'uuid'
-  | 'json';
+  | 'json'
+  | 'uuid_array'
+  | 'integer_array'
+  | 'text_array'
+  | 'float_array';
 
 // Entity configuration - the value side of ENTITIES registry.
 // Maps field names to their configurations.
@@ -133,6 +137,10 @@ export const SCHEMA_TO_TS_TYPE: Record<FieldType, string> = {
   date: 'string',
   uuid: 'string',
   json: 'Record<string, unknown>',
+  uuid_array: 'string[]',
+  integer_array: 'number[]',
+  text_array: 'string[]',
+  float_array: 'number[]',
 };
 
 // Maps schema field types to JavaScript defaults.
@@ -147,4 +155,8 @@ export const SCHEMA_TO_DEFAULT: Record<FieldType, unknown> = {
   date: '',
   uuid: '',
   json: {},
+  uuid_array: [],
+  integer_array: [],
+  text_array: [],
+  float_array: [],
 };

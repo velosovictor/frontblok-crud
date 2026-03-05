@@ -197,7 +197,8 @@ export function validateSchema(schema: Schema): string[] {
 
   const validTypes: FieldType[] = [
     'string', 'text', 'integer', 'decimal', 
-    'boolean', 'datetime', 'date', 'uuid', 'json'
+    'boolean', 'datetime', 'date', 'uuid', 'json',
+    'uuid_array', 'integer_array', 'text_array', 'float_array'
   ];
 
   for (const [tableName, fields] of Object.entries(schema)) {
