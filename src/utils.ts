@@ -114,6 +114,10 @@ export function schemaTypeToTs(fieldType: FieldType): string {
     date: 'string',
     uuid: 'string',
     json: 'Record<string, unknown>',
+    uuid_array: 'string[]',
+    integer_array: 'number[]',
+    text_array: 'string[]',
+    float_array: 'number[]',
   };
   return mapping[fieldType] || 'unknown';
 }
@@ -137,6 +141,10 @@ export function getFieldDefault(field: FieldConfig): unknown {
     date: '',
     uuid: '',
     json: {},
+    uuid_array: [],
+    integer_array: [],
+    text_array: [],
+    float_array: [],
   };
 
   return defaults[field.type] ?? '';
